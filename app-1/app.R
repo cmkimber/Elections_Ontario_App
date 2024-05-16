@@ -1,4 +1,4 @@
-setwd("~/Documents/Elections Ontario Data/app-1")
+setwd("~/Documents/Elections_Ontario_App/app-1")
 
 library(tidyverse)
 library(sf)

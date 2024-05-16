@@ -1,6 +1,6 @@
 # FIRST EXPLORATION OF HOW VARIOUS MAPPING PACKAGES WORK IN R
 
-setwd("~/Documents/Elections Ontario Data")
+setwd("~/Documents/Elections_Ontario_App")
 
 library(tidyverse)
 library(sf)
