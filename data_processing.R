@@ -7,11 +7,13 @@ library(sf)
 
 electoral_districts <- st_read("./data/Electoral District Shapefile - 2022 General Election/ELECTORAL_DISTRICT.shp")
 
-electoral_results_2022 <- read_csv("./data/Valid Votes Cast for Each Candidate_2024-Mar-07.csv") %>% mutate(ElectoralDistrictNumber = as.numeric(str_remove(string = ElectoralDistrictNumber, pattern = "^0+")))
+electoral_results_2022 <- read_csv("./data/Valid Votes Cast for Each Candidate_2024-Mar-07.csv") %>%
+  mutate(ElectoralDistrictNumber = as.numeric(str_remove(string = ElectoralDistrictNumber, pattern = "^0+")))
 
 # for mapping purposes, the shapefile needs the information on the winner of each district in the election attached
 
-electoral_winners <- electoral_results_2022 %>% filter(IsGeneralElection == 1, Plurality > 0)
+electoral_winners <- electoral_results_2022 %>%
+  filter(IsGeneralElection == 1, Plurality > 0)
 
 electoral_winners <- left_join(electoral_districts, electoral_winners, by = join_by(ED_ID == ElectoralDistrictNumber))
 
