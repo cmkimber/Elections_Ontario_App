@@ -1,4 +1,4 @@
-#setwd("~/Documents/Elections_Ontario_App/app-1")
+#setwd("~/Documents/Elections_Ontario_App/elections_ontario_app")
 
 library(tidyverse)
 library(sf)
@@ -23,6 +23,25 @@ for (i in (1:length(choices))){
 get_bounding_box <- function(polygon_row){
   bbox <- st_bbox(polygon_row$geometry)
   return(bbox)
+}
+
+# to have the popups on the map respond to either select or map clicking inputs, the centroid of the selected district polygon must be calculated
+get_centroid <- function(polygon_row){
+  centroid <- st_coordinates(st_centroid(polygon_row))
+  return(centroid)
+}
+
+# generate the text for the popups on the map based on what district is selected
+get_popup_text <- function(polygon_row){
+  district_name <- polygon_row$ElectoralDistrictNameEnglish
+  district_id <- polygon_row$ED_ID
+  candidate_name <- polygon_row$NameOfCandidates
+  candidate_party <- polygon_row$PoliticalInterestCode
+  popup_text <- glue(
+  "<b>{district_name} ({district_id})</b><br/>",
+  "{candidate_name} ({candidate_party})<br/>"
+  )
+  return(popup_text)
 }
 
 ui <- fluidPage(
@@ -59,6 +78,16 @@ server <- function(input, output, session){
                           fillOpacity = 0.5,
                           data = filter(electoral_winners_WGS84, ElectoralDistrictNameEnglish == district_input_filter()),
                           group = "highlighted_district")
+    proxy %>% clearGroup(group = "district_popup")
+    centroid <- filter(electoral_winners_WGS84, ElectoralDistrictNameEnglish == district_input_filter()) %>% 
+      get_centroid()
+    popup_text <- filter(electoral_winners_WGS84, ElectoralDistrictNameEnglish == district_input_filter()) %>%
+      get_popup_text()
+    proxy %>% addPopups(lng = centroid[1,1],
+                        lat = centroid[1,2],
+                        popup = popup_text,
+                        data = filter(electoral_winners_WGS84, ElectoralDistrictNameEnglish == district_input_filter()),
+                        group = "district_popup")
     bbox <- filter(electoral_winners_WGS84, ElectoralDistrictNameEnglish == district_input_filter()) %>%
       get_bounding_box()
     proxy %>% flyToBounds(lng1 = bbox[["xmin"]], lat1 = bbox[["ymin"]], lng2 = bbox[["xmax"]], lat2 = bbox[["ymax"]])
@@ -90,16 +119,6 @@ server <- function(input, output, session){
                                                default = NULL))
   })
   
-  #define the popup text  
-  
-  #popup_line1 <- paste0(electoral_winners_WGS84$ElectoralDistrictNameEnglish, " (", electoral_winners_WGS84$ED_ID, ")")
-  #popup_line2 <- paste0(electoral_winners_WGS84$NameOfCandidates, " (", electoral_winners_WGS84$PoliticalInterestCode, ")")
-  #popup_text <- paste(sep = "<br/>", popup_line1, popup_line2)
-  
-  popup_text <- glue(
-    "<b>{electoral_winners_WGS84$ElectoralDistrictNameEnglish} ({electoral_winners_WGS84$ED_ID})</b><br/>",
-    "{electoral_winners_WGS84$NameOfCandidates} ({electoral_winners_WGS84$PoliticalInterestCode})<br/>"
-  )
   
   output$mymap <- renderLeaflet({
     leaflet(electoral_winners_WGS84) %>%
@@ -110,8 +129,7 @@ server <- function(input, output, session){
                   color = "black",
                   weight = 1,
                   fillColor = ~factpal(PoliticalInterestCode),
-                  fillOpacity = 1,
-                  popup = popup_text)
+                  fillOpacity = 1)
   })
 }
 
