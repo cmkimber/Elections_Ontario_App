@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.1
+
+### Added or Changed
+- Map popup displaying district information and winning candidate now responds to either clicking on map or selecting district from the dropdown menu
+
 ## v1.0.0
 
 ### Added or Changed
