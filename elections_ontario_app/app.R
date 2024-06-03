@@ -45,7 +45,7 @@ ui <- fluidPage(
   helpText("To see the results of the 2022 General Election in a given riding, select the riding from the drop-down menu or click on the riding in the map. Note that you may search for a specific riding in the drop-down menu by typing its name or ID number."),
   selectInput(inputId = "year",
               label = "Election",
-              choices = unique(year(electoral_results$PollingDate)),
+              choices = sort(unique(year(electoral_results$PollingDate)), decreasing = TRUE),
               selected = NULL),
   # note selectize is used here with multiple selections enabled and a max number of selections of 1 to facilitate having the app initialize with no district selected
   selectizeInput(inputId = "district", 
@@ -55,8 +55,7 @@ ui <- fluidPage(
                  selected = NULL, 
                  options = list(maxItems = 1)),
   dataTableOutput("district_results"),
-  leafletOutput("mymap"),
-  textOutput("test")
+  leafletOutput("mymap")
 )
 
 server <- function(input, output, session){
@@ -88,24 +87,32 @@ server <- function(input, output, session){
                       selected = district_input_filter())
   })
   
+  # colouring district polygons by winner
+  observeEvent(electoral_year(), {
+    current_map <- left_join(electoral_districts_WGS84, electoral_winners(), by = join_by(ED_ID == ElectoralDistrictNumber))
+    proxy %>% clearGroup(group = "district_winners")
+    proxy %>% addPolygons(layerId = ~current_map$ED_ID,
+                          highlightOptions = highlightOptions(color = "white",
+                                                              weight = 2,
+                                                              fill = "white",
+                                                              fillOpacity = 0.5),
+                          color = "black",
+                          weight = 1,
+                          fillColor = ~factpal(PoliticalInterestCode),
+                          fillOpacity = 1,
+                          data = current_map,
+                          group = "district_winners")
+  })
+  
   # set default reactive value from inputs to be null (allows map to load without riding selected and no table)
   district_input_filter <- reactiveVal(value = NULL)
   
   # sync from the reactive value to the inputs
   observeEvent(district_input_filter(),{
     updateSelectizeInput(session, inputId = "district", selected = district_input_filter())
-    proxy %>% clearGroup(group = "highlighted_district")
-    #proxy %>% addPolylines(stroke = TRUE, weight = 4, color = "yellow", data = filter(electoral_districts_WGS84, ElectoralDistrictNameEnglish == district_input_filter()), group = "highlighted_district")
-    proxy %>% addPolygons(stroke = TRUE,
-                          weight = 4,
-                          color = "yellow",
-                          fillColor = "white",
-                          fillOpacity = 0.5,
-                          data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
-                          group = "highlighted_district")
     bbox <- filter(electoral_districts_WGS84, ED_ID == district_input_filter()) %>%
       get_bounding_box()
-    proxy %>% flyToBounds(lng1 = bbox[["xmin"]], lat1 = bbox[["ymin"]], lng2 = bbox[["xmax"]], lat2 = bbox[["ymax"]])
+    proxy %>% fitBounds(lng1 = bbox[["xmin"]], lat1 = bbox[["ymin"]], lng2 = bbox[["xmax"]], lat2 = bbox[["ymax"]])
   })
   
   # sync from the inputs to the reactive value
@@ -133,6 +140,15 @@ server <- function(input, output, session){
                           popup = popup_text,
                           data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
                           group = "district_popup")
+      # make highlighted district persist when selected year changes
+      proxy %>% clearGroup(group = "highlighted_district")
+      proxy %>% addPolygons(stroke = TRUE,
+                            weight = 4,
+                            color = "yellow",
+                            fillColor = "white",
+                            fillOpacity = 0.5,
+                            data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
+                            group = "highlighted_district")
     }
   )
   
@@ -156,17 +172,11 @@ server <- function(input, output, session){
   
   output$mymap <- renderLeaflet({
     leaflet(electoral_districts_WGS84) %>%
-      addPolygons(layerId = ~electoral_districts_WGS84$ED_ID,
-                  highlightOptions = highlightOptions(color = "white",
-                                                      weight = 2,
-                                                      fillOpacity = 0.2),
-                  color = "black",
-                  weight = 1,
-                  #fillColor = ~factpal(PoliticalInterestCode),
-                  fillOpacity = 1)
+      addPolygons(color = "black",
+                  weight = 0,
+                  fillColor = NULL,
+                  fillOpacity = 0)
   })
-  
-  output$test <- renderText(district_input_filter())
 }
 
 shinyApp(ui = ui, server = server)
