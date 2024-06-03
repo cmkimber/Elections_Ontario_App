@@ -17,6 +17,7 @@ electoral_results_2018 <- read_csv("./data/Valid Votes Cast for Each Candidate_2
 electoral_results <- union_all(electoral_results_2018, electoral_results_2022) %>%
   mutate(ElectoralDistrictNumber = as.numeric(str_remove(string = ElectoralDistrictNumber, pattern = "^0+"))) %>%
   mutate(across(PollingDate, as_date)) %>%
+  mutate(across(NameOfCandidates, str_to_upper)) %>%
   filter(IsGeneralElection == 1)
 
 saveRDS(electoral_districts_WGS84, file = "./elections_ontario_app/data/electoral_districts_WGS84.rds")
