@@ -10,12 +10,10 @@ library(glue)
 electoral_districts_WGS84 <- readRDS("./data/electoral_districts_WGS84.rds")
 electoral_results <- readRDS("./data/electoral_results.rds")
 
-electoral_winners <- electoral_results %>%
-  filter(Plurality > 0) %>%
-  mutate(across(PoliticalInterestCode, as.factor))
+winning_parties <- c("GPO", "IND", "LIB", "NDP", "PCP")
 
 # create a custom colour factor to assign the traditional colours to each political party (in order these are green, black, red, orange and blue)
-factpal <- colorFactor(c("#A6D43D", "#6E6E6E", "#E06666", "#FFA257", "#498BE7"), electoral_winners$PoliticalInterestCode)
+factpal <- colorFactor(c("#A6D43D", "#6E6E6E", "#E06666", "#FFA257", "#498BE7"), winning_parties)
 
 # to have the map zoom to fit each district regardless of geographical area, the bounding box of each district must be calculated
 get_bounding_box <- function(polygon_row){
@@ -66,11 +64,18 @@ server <- function(input, output, session){
   # set a leaflet proxy
   proxy <- leafletProxy("mymap")
   
-  # populate the second select input based on the year chosen in the first
+  # fitler the dataset based on the year chosen and create a subset showing district winners for mapping
   electoral_year <- reactive({
     filter(electoral_results, year(PollingDate) == input$year)
   })
   
+  electoral_winners <- reactive({
+    electoral_results %>%
+    filter(year(PollingDate) == input$year & Plurality > 0) %>%
+    mutate(across(PoliticalInterestCode, as.factor))
+  })
+
+  # populate the second select input based on the year chosen in the first  
   observeEvent(electoral_year(), {
     choices <- electoral_year()$ElectoralDistrictNumber
     # for ordering and searching purposes in the selectInput, the district ID is appended to each district's name to create an alias that is displayed in the selectInput
@@ -98,16 +103,6 @@ server <- function(input, output, session){
                           fillOpacity = 0.5,
                           data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
                           group = "highlighted_district")
-    proxy %>% clearGroup(group = "district_popup")
-    centroid <- filter(electoral_districts_WGS84, ED_ID == district_input_filter()) %>% 
-      get_centroid()
-    popup_text <- filter(electoral_year(), ElectoralDistrictNumber == district_input_filter()) %>%
-      get_popup_text()
-    proxy %>% addPopups(lng = centroid[1,1],
-                        lat = centroid[1,2],
-                        popup = popup_text,
-                        data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
-                        group = "district_popup")
     bbox <- filter(electoral_districts_WGS84, ED_ID == district_input_filter()) %>%
       get_bounding_box()
     proxy %>% flyToBounds(lng1 = bbox[["xmin"]], lat1 = bbox[["ymin"]], lng2 = bbox[["xmax"]], lat2 = bbox[["ymax"]])
@@ -120,6 +115,26 @@ server <- function(input, output, session){
   observeEvent(input$mymap_shape_click$id, {
     district_input_filter(input$mymap_shape_click$id)
   })
+  
+  # set the popups showing the district winner and district information to respond to a change in either year or district selected, to handle cases where the user wants to see the winner of the same district for different years
+  observeEvent(c(
+    electoral_year(),
+    district_input_filter()),
+    {
+      # use req to prevent error before the first district is chosen
+      req(!is.null(district_input_filter()))
+      proxy %>% clearGroup(group = "district_popup")
+      centroid <- filter(electoral_districts_WGS84, ED_ID == district_input_filter()) %>% 
+        get_centroid()
+      popup_text <- filter(electoral_winners(), ElectoralDistrictNumber == district_input_filter()) %>%
+        get_popup_text()
+      proxy %>% addPopups(lng = centroid[1,1],
+                          lat = centroid[1,2],
+                          popup = popup_text,
+                          data = filter(electoral_districts_WGS84, ED_ID == district_input_filter()),
+                          group = "district_popup")
+    }
+  )
   
   # table output uses req() to require a value from an input so it doesn't render on launch
   output$district_results <- DT::renderDataTable({
@@ -134,7 +149,7 @@ server <- function(input, output, session){
               colnames = c("Party", "Candidate", "Votes", "%")) %>%
       formatPercentage("PercentOfTotalValidBallotsCast", digits = 2) %>%
       formatStyle("PoliticalInterestCode",
-                  backgroundColor = styleEqual(levels = levels(electoral_winners$PoliticalInterestCode),
+                  backgroundColor = styleEqual(levels = winning_parties,
                                                values = c("#A6D43D", "#6E6E6E", "#E06666", "#FFA257", "#498BE7"),
                                                default = NULL))
   })
