@@ -1,4 +1,4 @@
-setwd("~/Documents/Elections_Ontario_App")
+#setwd("~/Documents/Elections_Ontario_App")
 
 library(tidyverse)
 library(lubridate)
