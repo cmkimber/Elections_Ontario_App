@@ -42,7 +42,7 @@ get_popup_text <- function(polygon_row){
 
 ui <- fluidPage(
   titlePanel("Election Results Map"),
-  helpText("To see the results of the 2022 General Election in a given riding, select the riding from the drop-down menu or click on the riding in the map. Note that you may search for a specific riding in the drop-down menu by typing its name or ID number."),
+  helpText("To see the results of a general election, first select an election you are interested in. Then, select the electoral district from the drop-down menu or click on the riding in the map. Once a district is selected, you may change the year to see how the results changed over time. Note that you may search for a specific district in the drop-down menu by typing its name or ID number."),
   selectInput(inputId = "year",
               label = "Election",
               choices = sort(unique(year(electoral_results$PollingDate)), decreasing = TRUE),
