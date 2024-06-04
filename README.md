@@ -20,7 +20,7 @@ _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play n
 ## Roadmap
 
 - [x] Build MVP of Election Results Map
-- [ ] Add multi-year data to map pane
+- [x] Add multi-year data to map pane
 - [ ] Bulid additional panes
   - [ ] Total Votes by Party
   - [ ] Seats/Ballots Won by Party

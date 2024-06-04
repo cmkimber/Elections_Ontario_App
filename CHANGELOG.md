@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.1.0
+
+### Added or Changed
+- Added support for data from 2018 general election
+  - Note that earlier elections are currently not supported because electoral district divisions differ and shapefiles are only available for the current divisions
+- Created a dropdown menu to switch between 2018 and 2022 elections
+- Restructured how data on election results is stored and retrieved to facilitate multiple years
+- Changed handling of on-click map popups and highlighting of selected districts to make it possible to switch between election years while keeping the same district selected
+
 ## v1.0.1
 
 ### Added or Changed
