@@ -1,8 +1,10 @@
-#setwd("~/Documents/Elections_Ontario_App")
+setwd("~/Documents/Elections_Ontario_App")
 
 library(tidyverse)
 library(lubridate)
 library(sf)
+
+# ----- Pane 1 (Map) Data Import -----
 
 # when reading in the shapefile and the election results, the format of the district IDs must be harmonized (leading 0s in one and not the other)
 
@@ -22,3 +24,12 @@ electoral_results <- union_all(electoral_results_2018, electoral_results_2022) %
 
 saveRDS(electoral_districts_WGS84, file = "./elections_ontario_app/data/electoral_districts_WGS84.rds")
 saveRDS(electoral_results, file = "./elections_ontario_app/data/electoral_results.rds")
+
+# ----- Pane 2 (Votes by Party Piechart) Data Import -----
+
+election_and_party <- read_csv("./data/Votes Cast By Election and Party.csv", name_repair = "universal")
+election_and_party <- election_and_party %>%
+  select(-...8) %>%
+  mutate(across(Election.Date, mdy))
+
+saveRDS(election_and_party, file = "./elections_ontario_app/data/election_and_party.rds")
