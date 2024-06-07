@@ -57,8 +57,7 @@ server <- function(input, output, session){
                            show.legend = FALSE) + 
       coord_polar(theta = "y", start = 0) +
       geom_label_repel_interactive(data = panel_2_df(),
-                                   aes(x = 1.2, y = pos, label = glue("<b>{Party.Acr}</b><br/>",
-                                                                      "{Votes.Cast} ({round(Pct.Votes, digits = 1)}%)")),
+                                   aes(x = 1.2, y = pos, label = paste0(Party.Acr, "\n", Votes.Cast, " (", round(Pct.Votes, digits = 1), ")%")),
                                    size = 3.5,
                                    #box_padding = 0.5,
                                    nudge_x = 0.8,
