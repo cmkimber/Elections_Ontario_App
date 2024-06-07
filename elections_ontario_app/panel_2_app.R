@@ -33,8 +33,8 @@ server <- function(input, output, session){
     election_and_party %>%
       filter(Year == input$year2) %>%
       arrange(desc(Pct.Votes)) %>%
-      mutate(Party.Temp = factor(Party.Temp, levels = Party.Temp),
-             Party.Temp = fct_relevel(Party.Temp, "Other", after = Inf)) %>%
+      mutate(Party.Temp = factor(Party.Temp, levels = Party.Temp)) %>%
+      mutate(Party.Temp = if ("Other" %in% levels(Party.Temp)) fct_relevel(Party.Temp, "Other", after = Inf) else Party.Temp) %>%
       arrange(Party.Temp) %>%
       mutate(csum = rev(cumsum(rev(Pct.Votes))),
              pos = Pct.Votes/2 + lead(csum, 1),
