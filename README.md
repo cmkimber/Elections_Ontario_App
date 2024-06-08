@@ -10,10 +10,10 @@ This app will be built in stages with new main features and additions to existin
 
 ## Built with
 
-* R 4.1
-* Shiny
-* Leaflet
-* Data Table
+* [R 4.1](https://www.r-project.org/)
+* [Shiny](https://shiny.posit.co/)
+* [Leaflet](https://leafletjs.com/)
+* [Data Tables](https://datatables.net/)
 
 _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play nicely with R 4.3 at the outset of this project. The reason appears related to the change in the handling of the _&&_ operator with vectors rather than scalars in R as of 4.3. This change is covered [here](https://www.jumpingrivers.com/blog/whats-new-r43/). It is for this reason that a legacy version of R is used instead.
 
@@ -22,7 +22,7 @@ _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play n
 - [x] Build MVP of Election Results Map
 - [x] Add multi-year data to map pane
 - [ ] Bulid additional panes
-  - [ ] Total Votes by Party
+  - [x] Total Votes by Party
   - [ ] Seats/Ballots Won by Party
   - [ ] Voter Turnout by Electoral District
   - [ ] Historical Voter Turnout

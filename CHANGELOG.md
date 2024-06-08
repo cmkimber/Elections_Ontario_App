@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.0
+
+### Added or Changed
+- Added a new pane to the application that plots votes per party and percentage of total vote share obtained by each party for every election from 1867-2022
+  - The election displayed is controllable via a dropdown menu
+- To make this plot, data obtained via Elections Ontario's Data Explorer was augmented with manual annotation to add party acronyms and colour coding
+  - these annotations were not automated due to frequent changes of official party names/acronyms over time
+
 ## v1.1.0
 
 ### Added or Changed
