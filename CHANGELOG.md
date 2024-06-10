@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.1
+
+### Added or Changed
+- Fixed green colour on pane 2 donut plot to match that of the pane 1 map
+
 ## v1.2.0
 
 ### Added or Changed
