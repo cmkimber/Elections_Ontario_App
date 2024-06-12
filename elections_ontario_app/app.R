@@ -324,11 +324,6 @@ server <- function(input, output, session){
   })
   
   output$pane_3_plot <- renderPlotly({
-    # response <- switch(input$seats_ballots,
-    #                    "Seats.Won" = parties_to_display()$Seats.Won,
-    #                    "Votes.Cast" = parties_to_display()$Votes.Cast,
-    #                    Seats.Won)
-    
     pane_3_plot <- ggplot(data = parties_to_display(),
                           aes(x = Year,
                               y = .data[[input$seats_ballots]],
@@ -353,7 +348,6 @@ server <- function(input, output, session){
   # Store information on which year is selected in plot in a reactive value and observe to maintain the saved year until a new year is hovered over. This avoids the year being set to NULL when moving between points and blanking the DataTable.
   chosen_year <- reactiveVal()
   observe({
-    req(!is.null(chosen_year()))
     hover_data <- event_data(event = "plotly_hover")$x[1]
     if(!is.null(hover_data))
       chosen_year(hover_data)
