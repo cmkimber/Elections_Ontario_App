@@ -19,6 +19,11 @@ colour_table <- election_seat_ballot %>%
   distinct(Party, .keep_all = TRUE)
 pane_3_palette <- setNames(colour_table$Party.Col, colour_table$Party)
 
+response_options <- c("Seats" = "Seats.Won",
+                      "Ballots" = "Votes.Cast",
+                      "% Seats" = "Pct.Seats",
+                      "% Ballots" = "Pct.Votes")
+
 ui <- fluidPage(
   titlePanel("holder"),
   helpText("holder"),
@@ -68,6 +73,8 @@ server <- function(input, output, session){
   
     pane_3_plot <- ggplot(data = parties_to_display(), aes_string(x = "Year", y = input$seats_ballots, group = "Party")) +
       geom_line(aes(color = Party)) +
+      labs(x = "Year",
+           y = names(response_options[which(response_options == input$seats_ballots)])) +
       scale_color_manual(values = pane_3_palette) +
       theme_light() +
       theme(panel.grid.major.x = element_blank(),
