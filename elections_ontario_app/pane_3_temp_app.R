@@ -79,8 +79,13 @@ server <- function(input, output, session){
     #                    "Votes.Cast" = parties_to_display()$Votes.Cast,
     #                    Seats.Won)
   
-    pane_3_plot <- ggplot(data = parties_to_display(), aes_string(x = "Year", y = input$seats_ballots, group = "Party")) +
-      geom_line(aes(color = Party)) +
+    pane_3_plot <- ggplot(data = parties_to_display(),
+                          aes(x = Year,
+                              y = .data[[input$seats_ballots]],
+                              group = Party)) +
+      geom_line(aes(color = Party,
+                    group = 1,
+                    text = paste(Party, Year, .data[[input$seats_ballots]], sep = "\n"))) +
       labs(x = "Year",
            y = names(response_options[which(response_options == input$seats_ballots)])) +
       scale_color_manual(values = pane_3_palette) +
@@ -90,7 +95,7 @@ server <- function(input, output, session){
             panel.grid.minor.y = element_blank(),
             legend.position = "none")
     
-    ggplotly(pane_3_plot, dynamicTicks = TRUE) %>%
+    ggplotly(pane_3_plot, dynamicTicks = TRUE, tooltip = "text") %>%
       rangeslider() %>%
       layout(hovermode = "x") %>%
       style(mode = "markers+lines")
