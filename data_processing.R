@@ -83,11 +83,11 @@ election_seat_ballot <- election_seat_ballot %>%
     ) %>%
   filter(Party != "Independent") %>%
   mutate(Party.Col = case_when(
-    Party == "Ontario Liberal Party" ~ "red",
-    Party == "Green Party of Ontario" ~ "green",
-    Party == "Progressive Conservative Party of Ontario" ~ "blue",
-    Party == "New Democratic Party of Ontario" ~ "orange",
-    TRUE ~ NA
+    Party == "Ontario Liberal Party" ~ "#E06666",
+    Party == "Green Party of Ontario" ~ "#A6D43D",
+    Party == "Progressive Conservative Party of Ontario" ~ "#498BE7",
+    Party == "New Democratic Party of Ontario" ~ "#FFA257",
+    TRUE ~ "black"
     )
   )
 
