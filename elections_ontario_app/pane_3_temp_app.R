@@ -82,10 +82,9 @@ server <- function(input, output, session){
     pane_3_plot <- ggplot(data = parties_to_display(),
                           aes(x = Year,
                               y = .data[[input$seats_ballots]],
-                              group = Party)) +
-      geom_line(aes(color = Party,
-                    group = 1,
-                    text = paste(Party, Year, .data[[input$seats_ballots]], sep = "\n"))) +
+                              group = Party,
+                              text = paste(Party, Year, .data[[input$seats_ballots]], sep = "\n"))) +
+      geom_line(aes(color = Party)) +
       labs(x = "Year",
            y = names(response_options[which(response_options == input$seats_ballots)])) +
       scale_color_manual(values = pane_3_palette) +
