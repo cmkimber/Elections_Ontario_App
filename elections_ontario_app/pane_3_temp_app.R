@@ -25,22 +25,30 @@ response_options <- c("Seats" = "Seats.Won",
                       "% Ballots" = "Pct.Votes")
 
 ui <- fluidPage(
-  titlePanel("holder"),
-  helpText("holder"),
-  selectizeInput(inputId = "party",
-                 label = "Parties",
-                 choices = unique(election_seat_ballot$Party),
-                 selected = c("Ontario Liberal Party", "Green Party of Ontario", "Progressive Conservative Party of Ontario", "New Democratic Party of Ontario", "Family Coalition Party"),
-                 multiple = TRUE),
-  checkboxInput(inputId = "percentage", 
-                label = "Show percentage",
-                FALSE),
-  radioButtons(inputId = "seats_ballots",
-                 label = "",
-                 choices = c("Seats" = "Seats.Won",
-                             "Ballots" = "Votes.Cast")),
-  plotlyOutput("pane_3_plot"),
-  DTOutput("pane_3_table")
+  titlePanel("Seats/Ballots Won by Parties"),
+  helpText("This visualization explores the success of parties over time. Use the dropdown menu to choose which parties you wish to display. Use the controls above the graph to switch between vote totals and legislature seat totals per party, either in absolute values or as percentages of total. Control the time period using the selector bar below the graph."),
+  fluidRow(
+    column(8,
+      selectizeInput(inputId = "party",
+                     label = "Parties",
+                     choices = unique(election_seat_ballot$Party),
+                     selected = c("Ontario Liberal Party", "Green Party of Ontario", "Progressive Conservative Party of Ontario", "New Democratic Party of Ontario", "Family Coalition Party"),
+                     multiple = TRUE)
+    ),
+    column(4,
+      checkboxInput(inputId = "percentage", 
+                    label = "Show percentage",
+                    FALSE),
+      radioButtons(inputId = "seats_ballots",
+                     label = "",
+                     choices = c("Seats" = "Seats.Won",
+                                 "Ballots" = "Votes.Cast"))
+    )
+  ),
+  fluidRow(
+    plotlyOutput("pane_3_plot"),
+    DTOutput("pane_3_table")
+  )
 )
 
 server <- function(input, output, session){
