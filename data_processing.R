@@ -93,3 +93,15 @@ election_seat_ballot <- election_seat_ballot %>%
   )
 
 saveRDS(election_seat_ballot, file = "./elections_ontario_app/data/election_seat_ballot.rds")
+
+# ----- Pane 4 (Voter Turnout by Electoral District) Data Import -----
+
+election_turnout_district <- read_csv(file = "./data/Votes Cast By Election and District.csv", name_repair = "universal")
+
+election_turnout_district <- election_turnout_district %>%
+  select(-...13) %>%
+  mutate(across(Election.Date, mdy)) %>%
+  mutate(Pct.Turnout = Voter.Turnout/Registered.Voters*100) %>%
+  mutate(across(Pct.Turnout, ~round(.x, digits = 2)))
+
+saveRDS(election_turnout_district, file = "./elections_ontario_app/data/election_district_turnout.rds")
