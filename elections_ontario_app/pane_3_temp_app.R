@@ -105,7 +105,8 @@ server <- function(input, output, session){
               rownames = FALSE,
               options = list(dom = "t",
                              searching = FALSE,
-                             order = list(list(2, "desc")))) %>%
+                             order = list(list(2, "desc"))),
+              colnames = c("Party", "Year", names(response_options[which(response_options == input$seats_ballots)]))) %>%
       formatStyle("Party",
                   backgroundColor = styleEqual(levels = c("Green Party of Ontario", "Ontario Liberal Party", "New Democratic Party of Ontario", "Progressive Conservative Party of Ontario"),
                                                values = c("#A6D43D", "#E06666", "#FFA257", "#498BE7")))
