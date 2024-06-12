@@ -60,7 +60,8 @@ election_seat_ballot <- election_seat_ballot %>%
   filter(Year >= 1990) %>%
   group_by(Year) %>%
   mutate(Pct.Votes = Votes.Cast/sum(Votes.Cast)*100,
-         Pct.Seats = Seats.Won/sum(Seats.Won)*100)
+         Pct.Seats = Seats.Won/sum(Seats.Won)*100) %>%
+  mutate(across(c(Pct.Votes, Pct.Seats), ~round(.x, digits = 2)))
 
 # As for the above pane (same source data), there are issues with inconsistent official names used for the same parties. In this visualization, which tracks parties over time, the party names need to be standardized. Fortunately, from 1990-2024 there are relatively non-overlapping names that make pattern-based find/replace feasible.
 election_seat_ballot <- election_seat_ballot %>%
