@@ -49,3 +49,46 @@ election_and_party <- election_and_party %>%
   add_column(Party.Acr = Party.Acr, Party.Col = Party.Col)
 
 saveRDS(election_and_party, file = "./elections_ontario_app/data/election_and_party.rds")
+
+# ----- Pane 3 (Seats/Ballots Won By Parties) Data Import -----
+
+election_seat_ballot <- read_csv("./data/Votes Cast By Election and Party.csv", name_repair = "universal")
+
+election_seat_ballot <- election_seat_ballot %>%
+  select(-...8) %>%
+  mutate(across(Election.Date, mdy)) %>%
+  filter(Year >= 1990) %>%
+  group_by(Year) %>%
+  mutate(Pct.Votes = Votes.Cast/sum(Votes.Cast)*100,
+         Pct.Seats = Seats.Won/sum(Seats.Won)*100)
+
+# As for the above pane (same source data), there are issues with inconsistent official names used for the same parties. In this visualization, which tracks parties over time, the party names need to be standardized. Fortunately, from 1990-2024 there are relatively non-overlapping names that make pattern-based find/replace feasible.
+election_seat_ballot <- election_seat_ballot %>%
+  mutate(Party = case_when(
+    str_detect(Party, "Liberal") ~ "Ontario Liberal Party",
+    str_detect(Party, "Green") ~ "Green Party of Ontario",
+    str_detect(Party, 'Conservative') ~ "Progressive Conservative Party of Ontario",
+    str_detect(Party, "New Democratic") ~ "New Democratic Party of Ontario",
+    str_detect(Party, "Communist") ~ "Communist Party of Canada (Ontario)",
+    str_detect(Party, "Freedom") ~ "Freedom Party of Ontario",
+    str_detect(Party, "Special Needs") ~ "Party for People with Special Needs",
+    str_detect(Party, "The Peoples Political Party") ~ "The People's Political Party",
+    str_detect(Party, "Libertarian") ~ "Ontario Libertarian Party",
+    str_detect(Party, "Heritage") ~ "Northern Ontario Heritage",
+    str_detect(Party, "Confederation") ~ "Ontario Provincial Confederation of Regions Party",
+    str_detect(Party, "Family") ~ "Family Coalition Party",
+    str_detect(Party, "None of the Above") ~ "None of the Above Direct Democracy Party",
+    str_detect(Party, "Vegan") ~ "Go Vegan",
+    TRUE ~ Party)
+    ) %>%
+  filter(Party != "Independent") %>%
+  mutate(Party.Col = case_when(
+    Party == "Ontario Liberal Party" ~ "red",
+    Party == "Green Party of Ontario" ~ "green",
+    Party == "Progressive Conservative Party of Ontario" ~ "blue",
+    Party == "New Democratic Party of Ontario" ~ "orange",
+    TRUE ~ NA
+    )
+  )
+
+saveRDS(election_seat_ballot, file = "./elections_ontario_app/data/election_seat_ballot.rds")
