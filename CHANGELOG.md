@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.0
+
+### Added or Changed
+- Added new pane to the application that plots the total number of seats or votes obtained per party over each election from 1990-2002 using a line plot
+  - Multiple parties can be displayed at once using a dropdown input and the response variable is controllable via button and checkbox inputs
+- To make this plot, data obtained via Elections Ontario's Data Explorer was augmented by manual annotation to standardize official party names and add colour coding
+  - These annotations were made programatically but required manual inspection to determine which party names were actually aliases of one another
+
 ## v1.2.1
 
 ### Added or Changed
@@ -11,7 +19,7 @@
 - Added a new pane to the application that plots votes per party and percentage of total vote share obtained by each party for every election from 1867-2022
   - The election displayed is controllable via a dropdown menu
 - To make this plot, data obtained via Elections Ontario's Data Explorer was augmented with manual annotation to add party acronyms and colour coding
-  - these annotations were not automated due to frequent changes of official party names/acronyms over time
+  - These annotations were not automated due to frequent changes of official party names/acronyms over time
 
 ## v1.1.0
 

@@ -23,7 +23,7 @@ _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play n
 - [x] Add multi-year data to map pane
 - [ ] Bulid additional panes
   - [x] Total Votes by Party
-  - [ ] Seats/Ballots Won by Party
+  - [x] Seats/Ballots Won by Party
   - [ ] Voter Turnout by Electoral District
   - [ ] Historical Voter Turnout
 
@@ -36,3 +36,4 @@ See [Open Issues](https://github.com/cmkimber/Elections_Ontario_App/issues?q=is%
 * [shinyapps.io](https://www.shinyapps.io/)
 * [Mastering Shiny](https://mastering-shiny.org/index.html)
 * [Happy Git and GitHub for the useR](https://happygitwithr.com/)
+* [Interactive web-based data visualization with R, plotly and shiny](https://plotly-r.com/)
