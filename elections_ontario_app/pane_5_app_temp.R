@@ -13,10 +13,27 @@ library(plotly)
 election_results <- readRDS("./data/election_turnout.rds")
 
 ui <- fluidPage(
-  
+  titlePanel("holder"),
+  helpText("holder"),
+  plotlyOutput("pane_5_plot")
 )
 
 server <- function(input, output, session){
+  
+  output$pane_5_plot <- renderPlotly({
+    pane_5_plot <- plot_ly(election_results,
+                           x = ~Year,
+                           y = ~Voter.Turnout,
+                           type = "scatter",
+                           mode = "lines", 
+                           fill = 'tozeroy') %>%
+      add_trace(x = ~Year,
+                y = ~Registered.Voters,
+                fill = "none",
+                line = list(dash = "dash")) %>%
+      rangeslider(start = 1867, end = 1940)
+      
+  })
   
 }
 
