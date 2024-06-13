@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.0
+
+### Added or Changed
+- Added a new pane to the application that plots the total registered voters and number of ballots cast per electoral district for each election from 1867-2022
+  - The election of interest can be chosen using a dropdown menu and the districts of interest can be displayed using a range selection bar
+
 ## v1.3.1
 
 ### Added or Changed
@@ -8,7 +14,7 @@
 ## v1.3.0
 
 ### Added or Changed
-- Added new pane to the application that plots the total number of seats or votes obtained per party over each election from 1990-2002 using a line plot
+- Added a new pane to the application that plots the total number of seats or votes obtained per party over each election from 1990-2002 using a line plot
   - Multiple parties can be displayed at once using a dropdown input and the response variable is controllable via button and checkbox inputs
 - To make this plot, data obtained via Elections Ontario's Data Explorer was augmented by manual annotation to standardize official party names and add colour coding
   - These annotations were made programatically but required manual inspection to determine which party names were actually aliases of one another

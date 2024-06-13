@@ -14,6 +14,9 @@ This app will be built in stages with new main features and additions to existin
 * [Shiny](https://shiny.posit.co/)
 * [Leaflet](https://leafletjs.com/)
 * [Data Tables](https://datatables.net/)
+* [ggplot2](https://ggplot2.tidyverse.org/)
+* [ggiraph](http://davidgohel.github.io/ggiraph/)
+* [Plotly](https://plotly.com/graphing-libraries/)
 
 _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play nicely with R 4.3 at the outset of this project. The reason appears related to the change in the handling of the _&&_ operator with vectors rather than scalars in R as of 4.3. This change is covered [here](https://www.jumpingrivers.com/blog/whats-new-r43/). It is for this reason that a legacy version of R is used instead.
 
@@ -24,7 +27,7 @@ _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play n
 - [ ] Bulid additional panes
   - [x] Total Votes by Party
   - [x] Seats/Ballots Won by Party
-  - [ ] Voter Turnout by Electoral District
+  - [x] Voter Turnout by Electoral District
   - [ ] Historical Voter Turnout
 
 See [Open Issues](https://github.com/cmkimber/Elections_Ontario_App/issues?q=is%3Aopen+is%3Aissue) for more detail on proposed features (and known issues).
