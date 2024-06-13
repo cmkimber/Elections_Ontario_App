@@ -1,4 +1,4 @@
-#setwd("~/Documents/Elections_Ontario_App/elections_ontario_app")
+setwd("~/Documents/Elections_Ontario_App/elections_ontario_app")
 
 library(tidyverse)
 library(sf)
@@ -235,9 +235,10 @@ server <- function(input, output, session){
       filter(ElectoralDistrictNumber == district_input_filter()) %>%
       select(c(PoliticalInterestCode, NameOfCandidates, TotalValidBallotsCast, PercentOfTotalValidBallotsCast))
     datatable(df_out,
+              rownames = FALSE,
               options = list(dom = "t",
                              searching = FALSE,
-                             order = list(list(3, "desc"))),
+                             order = list(list(2, "desc"))),
               colnames = c("Party", "Candidate", "Votes", "%")) %>%
       formatPercentage("PercentOfTotalValidBallotsCast", digits = 2) %>%
       formatStyle("PoliticalInterestCode",
