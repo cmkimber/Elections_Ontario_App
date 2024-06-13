@@ -39,10 +39,23 @@ server <- function(input, output, session){
   #     layout(hovermode = "x")
     
   # Build this plot in using plot_ly() because setting limits for rangeslider() does not work with ggplotly()
-    pane_4_plot <- plot_ly(election_to_display(), x = ~Electoral.District, y = ~Voter.Turnout, type = "bar", name = "Voter Turnout") %>%
-      add_trace(y = ~Registered.Voters, name = "Registered Voters") %>%
-      # note rangeslider start for categorical seems to be 0-indexed?
-      rangeslider(start = 0, end = 20) %>%
+    pane_4_plot <- plot_ly(election_to_display(),
+                           x = ~Electoral.District,
+                           y = ~Voter.Turnout,
+                           type = "bar",
+                           text = ~Pct.Turnout,
+                           name = "Voter Turnout",
+                           hovertemplate = paste("%{x}", "<br>Voter Turnout: %{y} (%{text:.2%})"),
+                           texttemplate = "%{text:.0%}",
+                           textposition = "outside") %>%
+      add_trace(y = ~Registered.Voters,
+                text = ~Registered.Voters,
+                name = "Registered Voters",
+                hovertemplate = paste("%{x}", "<br>Registered Voters: %{y}"),
+                texttemplate = "%{y}",
+                textposition = "outside") %>%
+      # note rangeslider start for categorical seems to be indexed strangely
+      rangeslider(start = -1, end = 20) %>%
       layout(xaxis = list(title = "Electoral Districts",
                           tickangle = 20),
              yaxis = list(title = "Voters"),
