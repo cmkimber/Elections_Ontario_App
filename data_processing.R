@@ -101,7 +101,6 @@ election_turnout_district <- read_csv(file = "./data/Votes Cast By Election and 
 election_turnout_district <- election_turnout_district %>%
   select(-...13) %>%
   mutate(across(Election.Date, mdy)) %>%
-  mutate(Pct.Turnout = Voter.Turnout/Registered.Voters) %>%
-  mutate(across(Pct.Turnout, ~round(.x, digits = 2)))
+  mutate(Pct.Turnout = Voter.Turnout/Registered.Voters)
 
 saveRDS(election_turnout_district, file = "./elections_ontario_app/data/election_district_turnout.rds")
