@@ -399,12 +399,14 @@ server <- function(input, output, session){
                            type = "bar",
                            text = ~Pct.Turnout,
                            name = "Voter Turnout",
+                           marker = list(color = "#ffcf00"),
                            hovertemplate = paste("%{y:,d} (%{text:.2%})"),
                            texttemplate = "%{text:.0%}",
                            textposition = "outside") %>%
       add_trace(y = ~Registered.Voters,
                 text = ~Registered.Voters,
                 name = "Registered Voters",
+                marker = list(color = "#0000006b"),
                 hovertemplate = paste("%{y:,d}"),
                 texttemplate = "%{y:,d}",
                 textposition = "outside") %>%
