@@ -45,20 +45,23 @@ server <- function(input, output, session){
                            type = "bar",
                            text = ~Pct.Turnout,
                            name = "Voter Turnout",
-                           hovertemplate = paste("%{y} (%{text:.2%})"),
+                           hovertemplate = paste("%{y:,d} (%{text:.2%})"),
                            texttemplate = "%{text:.0%}",
                            textposition = "outside") %>%
       add_trace(y = ~Registered.Voters,
                 text = ~Registered.Voters,
                 name = "Registered Voters",
-                hovertemplate = paste("%{y}"),
-                texttemplate = "%{y}",
+                hovertemplate = paste("%{y:,d}"),
+                texttemplate = "%{y:,d}",
                 textposition = "outside") %>%
       # note rangeslider start for categorical seems to be indexed strangely
       rangeslider(start = -1, end = 20) %>%
       layout(xaxis = list(title = "Electoral Districts",
-                          tickangle = 20),
-             yaxis = list(title = "Voters"),
+                          tickangle = 20,
+                          ticks = "outside"),
+             yaxis = list(title = "Voters",
+                          nticks = 10,
+                          tickformat = ",d"),
              barmode = "group",
              hovermode = "x unified")
 
