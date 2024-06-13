@@ -27,17 +27,28 @@ server <- function(input, output, session){
   election_to_display <- reactive({
     election_turnout_district %>%
       filter(Year == input$year4) %>%
-      select(c(Electoral.District, Registered.Voters, Voter.Turnout, Pct.Turnout)) %>%
-      pivot_longer(-Electoral.District)
+      select(c(Electoral.District, Registered.Voters, Voter.Turnout, Pct.Turnout))
   })
   
   output$pane_4_plot <- renderPlotly({
-    pane_4_plot <- ggplot(data = filter(election_to_display(), value != "Pct.Turnout"), aes(x = Electoral.District, y = value, fill = name)) + 
-      geom_col(position = "dodge")
+  #   pane_4_plot <- ggplot(data = filter(election_to_display(), value != "Pct.Turnout"), aes(x = Electoral.District, y = value, fill = name)) +
+  #     geom_col(position = "dodge")
+  # 
+  #   ggplotly(pane_4_plot, dynamicTicks = TRUE) %>%
+  #     rangeslider(start = 1, end = 20) %>%
+  #     layout(hovermode = "x")
     
-    ggplotly(pane_4_plot, dynamicTicks = TRUE) %>%
-      rangeslider()
-    
+  # Build this plot in using plot_ly() because setting limits for rangeslider() does not work with ggplotly()
+    pane_4_plot <- plot_ly(election_to_display(), x = ~Electoral.District, y = ~Voter.Turnout, type = "bar", name = "Voter Turnout") %>%
+      add_trace(y = ~Registered.Voters, name = "Registered Voters") %>%
+      # note rangeslider start for categorical seems to be 0-indexed?
+      rangeslider(start = 0, end = 20) %>%
+      layout(xaxis = list(title = "Electoral Districts",
+                          tickangle = 20),
+             yaxis = list(title = "Voters"),
+             barmode = "group",
+             hovermode = "x")
+
   })
 }
 
