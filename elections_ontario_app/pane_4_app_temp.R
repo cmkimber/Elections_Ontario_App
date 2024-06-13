@@ -13,8 +13,8 @@ library(plotly)
 election_district_turnout <- readRDS(file = "./data/election_district_turnout.rds")
 
 ui <- fluidPage(
-  titlePanel("holder"),
-  helpText("holder"),
+  titlePanel("Voter Turnout by Electoral District"),
+  helpText("This graph compares the total number of registered voters to the total number of ballots cast (voter turnout), by riding, for elections from 1867 to 2022. The election of interest can be chosen using the dropdown menu."),
   selectizeInput(inputId = "year4",
                  label= "Election",
                  choices = sort(unique(election_district_turnout$Year), decreasing = TRUE),
@@ -60,7 +60,7 @@ server <- function(input, output, session){
                           tickangle = 20,
                           ticks = "outside"),
              yaxis = list(title = "Voters",
-                          nticks = 10,
+                          nticks = 8,
                           tickformat = ",d"),
              barmode = "group",
              hovermode = "x unified")
