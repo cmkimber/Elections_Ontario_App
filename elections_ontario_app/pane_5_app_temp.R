@@ -24,14 +24,30 @@ server <- function(input, output, session){
     pane_5_plot <- plot_ly(election_results,
                            x = ~Year,
                            y = ~Voter.Turnout,
+                           text = ~Pct.Turnout,
+                           name = "Voter Turnout",
                            type = "scatter",
-                           mode = "lines", 
-                           fill = 'tozeroy') %>%
+                           mode = "lines+markers", 
+                           fill = 'tozeroy',
+                           line = list(width = 0.75,
+                                       color = "#0000006b"),
+                           #marker = list(color = "#0000006b"),
+                           fillcolor = "#ffcf00",
+                           texttemplate = "%{text:.0%}",
+                           textposition = "outside") %>%
       add_trace(x = ~Year,
                 y = ~Registered.Voters,
+                name = "Total Voters",
+                mode = "lines",
                 fill = "none",
-                line = list(dash = "dash")) %>%
-      rangeslider(start = 1867, end = 1940)
+                line = list(width = 2,
+                            color = "#0000006b",
+                            dash = "dash")) %>%
+      rangeslider(start = 1867, end = 1940) %>%
+      layout(xaxis = list(title = "Years",
+                          ticks = "outside"),
+             yaxis = list(title = "Ballots"),
+             hovermode = "x unified")
       
   })
   
