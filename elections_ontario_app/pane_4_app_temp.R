@@ -31,14 +31,8 @@ server <- function(input, output, session){
   })
   
   output$pane_4_plot <- renderPlotly({
-  #   pane_4_plot <- ggplot(data = filter(election_to_display(), value != "Pct.Turnout"), aes(x = Electoral.District, y = value, fill = name)) +
-  #     geom_col(position = "dodge")
-  # 
-  #   ggplotly(pane_4_plot, dynamicTicks = TRUE) %>%
-  #     rangeslider(start = 1, end = 20) %>%
-  #     layout(hovermode = "x")
     
-  # Build this plot in using plot_ly() because setting limits for rangeslider() does not work with ggplotly()
+  # Build this plot using plot_ly() because setting default limits for rangeslider() does not work with ggplotly()
     pane_4_plot <- plot_ly(election_to_display(),
                            x = ~Electoral.District,
                            y = ~Voter.Turnout,
