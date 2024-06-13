@@ -25,7 +25,7 @@ ui <- fluidPage(
 server <- function(input, output, session){
   
   election_to_display <- reactive({
-    election_turnout_district %>%
+    election_district_turnout %>%
       filter(Year == input$year4) %>%
       select(c(Electoral.District, Registered.Voters, Voter.Turnout, Pct.Turnout))
   })
