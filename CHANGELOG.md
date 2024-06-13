@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.1
+
+### Added or Changed
+- Removed the unnecssary row indices from the table displaying district data in pane 1
+
 ## v1.3.0
 
 ### Added or Changed
