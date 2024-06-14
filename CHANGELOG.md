@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.0
+
+### Added or Changed
+- Added a new pane to the application that plots the total registered voters and number of ballots cast per election for each election from 1867-2022.
+  - The time period of interest can be displayed using a range selection bar
+
 ## v1.4.0
 
 ### Added or Changed

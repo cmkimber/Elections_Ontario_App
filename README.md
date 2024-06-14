@@ -6,7 +6,7 @@ The main purpose of this project is for me to learn how to build interactive web
 
 The data used is publically available and hosted by [Elections Ontario](https://results.elections.on.ca/en/publications). The shapefiles for electoral districts are governed by the Open Use Data Product License Agreement. I have not republished the data in this repo. The scripts used for ingesting and formatting data are provided, however.
 
-This app will be built in stages with new main features and additions to existing features added regularly. [The most up-to-date functioning app is available to use here](http://cmkimber.shinyapps.io/elections_ontario_app).
+This app will be built in stages with new main features and additions to existing features added regularly. As of v1.5, the app now contains all the expected main features, though additions and bugfixes are still expected. [The most up-to-date functioning app is available to use here](http://cmkimber.shinyapps.io/elections_ontario_app).
 
 ## Built with
 
@@ -24,11 +24,11 @@ _Note_: In my experience, the _renderLeaflet()_ function in Shiny did not play n
 
 - [x] Build MVP of Election Results Map
 - [x] Add multi-year data to map pane
-- [ ] Bulid additional panes
+- [x] Bulid additional panes
   - [x] Total Votes by Party
   - [x] Seats/Ballots Won by Party
   - [x] Voter Turnout by Electoral District
-  - [ ] Historical Voter Turnout
+  - [x] Historical Voter Turnout
 
 See [Open Issues](https://github.com/cmkimber/Elections_Ontario_App/issues?q=is%3Aopen+is%3Aissue) for more detail on proposed features (and known issues).
 
